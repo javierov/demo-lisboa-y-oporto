@@ -706,7 +706,10 @@ $("zi").onclick=()=>zoomBy(.7);$("zo").onclick=()=>zoomBy(1/.7);$("zr").onclick=
     if(pts.size===1){const [,,s]=toSvg(0,0),dx=e.clientX-pr[0],dy=e.clientY-pr[1];moved+=Math.abs(dx)+Math.abs(dy);VB[0]-=dx*s;VB[1]-=dy*s;setVB()}
     else if(pts.size===2){const [a,b]=[...pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(d0){const [cx,cy]=toSvg((a[0]+b[0])/2,(a[1]+b[1])/2);zoomBy(d0/d,cx,cy)}d0=d;moved=99}});
   const up=e=>{pts.delete(e.pointerId);if(!pts.size)sv.classList.remove("drag");d0=0};
-  sv.addEventListener("pointerup",e=>{const g=moved<8&&e.target.closest&&e.target.closest("[data-ic2]");up(e);if(g){mcity=g.dataset.ic2;mfocus="";renderMap(true)}});
+  sv.addEventListener("pointerup",e=>{const tap=moved<8&&pts.size===1;up(e);if(!tap)return;
+    const [x,y,s]=toSvg(e.clientX,e.clientY);let best="",bd=1e9;
+    for(const [c] of STOPS){const [cx,cy]=PX(...STOPGEO[c]),d=Math.hypot(cx-x,cy-y)/s;if(d<bd){bd=d;best=c}}
+    if(bd<36){mcity=best;mfocus="";renderMap(true)}});
   sv.addEventListener("pointercancel",up)}
 function renderPins(){let last="";
   $("pins").innerHTML=mlist().map(([k,p],i)=>{const hd=p[1]!==last?`<li class="pg" style="--c:${C[p[1]].c}"><i></i>${p[1]}${mday?"":` · ${wd(p[2])} ${p[2]}`}</li>`:"";last=p[1];return hd+`<li class="pn${mfocus===k?" on":""}" data-pk="${k}" style="--c:${C[p[1]].c}"><button type="button" class="pb" data-pk="${k}"><span class="nm">${i+1}</span><span><b>${esc(p[0])}</b><small>${wd(p[2])} ${p[2]} dic</small></span></button><a class="pr" href="${route(p[5])}" target="_blank" rel="noopener" aria-label="Cómo llegar a ${esc(p[0])}">${ico("go",2)}</a></li>`}).join("")}
