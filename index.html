@@ -354,7 +354,8 @@ input::placeholder{color:var(--mute)}
 .wvc i{display:block;width:100%;border-radius:5px 5px 2px 2px;background:color-mix(in srgb,var(--naz) 45%,transparent)}
 .wvc span.on i{background:var(--naz)}.wvc small{font-size:11px;color:var(--soft)}.wvc span.on small{color:var(--ink);font-weight:700}
 a.ft{text-decoration:none}
-.flt{--fi:var(--ink);--fs:var(--soft);margin:22px 20px 0;border:1px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:14px;background:color-mix(in srgb,var(--ink) 9%,var(--bg));color:var(--fi);overflow:hidden}
+.flt{--fi:var(--ink);--fs:var(--soft);margin:22px 20px 0;border:1px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:14px;background:color-mix(in srgb,var(--ink) 9%,var(--bg));color:var(--fi);position:relative;margin-top:48px}
+.flt::before{content:"Vuelos";position:absolute;left:14px;top:-26px;height:30px;padding:0 14px 4px;display:flex;align-items:center;font-size:12.5px;font-weight:700;letter-spacing:.02em;color:var(--fs);background:color-mix(in srgb,var(--ink) 6%,var(--bg));border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);border-radius:10px 10px 0 0;z-index:-1}
 .flt+.ft{margin-top:22px}
 .flt .fr{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px}
 .flt .fr+.fr{border-top:1px solid color-mix(in srgb,var(--ink) 16%,transparent)}
