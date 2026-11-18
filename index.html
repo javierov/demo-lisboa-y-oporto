@@ -362,7 +362,7 @@ a.ft{text-decoration:none}
 .mtabs{display:flex;gap:4px;overflow-x:auto;padding:6px;border-bottom:1px solid var(--line);scrollbar-width:none}.mtabs::-webkit-scrollbar{display:none}
 .mtabs button{flex:1 0 auto;border:0;background:none;border-radius:12px;padding:7px 6px;font-weight:700;font-size:13px;color:var(--soft);cursor:pointer;white-space:nowrap}
 .mtabs button[aria-selected=true]{background:var(--btn);color:var(--btnInk)}
-.mstage{position:relative;height:min(56vh,460px);min-height:300px}
+.mstage{position:relative;height:min(56vh,460px)}
 .mstage .rst{position:absolute;right:10px;bottom:10px;z-index:900;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid light-dark(#e3ded2,#2a3532);background:light-dark(#ffffff,#172120);color:light-dark(#17201f,#eef2ef);font:600 15px "Plus Jakarta Sans",sans-serif;cursor:pointer;box-shadow:0 4px 12px -6px #0005}
 .imap{position:absolute;inset:0;overflow:hidden;background:var(--sea2)}
 .imap{--bg2:light-dark(#fbfaf6,#0f1615);--sea1:light-dark(#d6ecf2,#0c2a35);--sea2:light-dark(#a9d4e2,#0a2029);--wave:light-dark(#ffffff,#2b5564);--land1:light-dark(#e6e0c8,#1c2622);--land2:light-dark(#f7f3e8,#232d2a);--coast:light-dark(#8fbfcd,#356777);--mt:light-dark(#c9bf9f,#36423d);--mt2:light-dark(#b2a684,#2c3632);--ink2:light-dark(#17201f,#eef2ef);--mut2:light-dark(#5d6966,#a3b0ac);--reg:light-dark(#475569,#94a3b8);--card2:light-dark(#ffffff,#172120);--line3:light-dark(#e3ded2,#2a3532)}
@@ -701,6 +701,8 @@ function tileUrl(){$("lmap").classList.toggle("dk",getComputedStyle(document.doc
 function loadLeaflet(){if(leafletState)return;leafletState=1;
   const css=document.createElement("link");css.rel="stylesheet";css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";document.head.appendChild(css);
   const s=document.createElement("script");s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";s.onload=()=>{leafletState=2;renderMap(true)};s.onerror=()=>{leafletState=3;renderMap(false)};document.head.appendChild(s)}
+function fitStage(){const b=$("mbox"),st=b.querySelector(".mstage");if(!b.offsetParent)return;const z=parseFloat(getComputedStyle(document.documentElement).zoom)||1,top=(st.getBoundingClientRect().top+scrollY)/z,av=innerHeight/z-top-14;st.style.height=Math.round(Math.max(180,Math.min(460,av)))+"px"}
+addEventListener("resize",()=>{if(!$("s-mapa").hidden)fitStage()});
 function renderMap(fit){renderPins();$("mchips").querySelectorAll("button").forEach(b=>b.classList.toggle("on",+b.dataset.md===mday));
   $("cchips").innerHTML=[["","Ruta"],...STOPS.map(([c])=>[c,c])].map(([v,l])=>`<button type="button" role="tab" data-mc="${v}" aria-selected="${mcity===v}">${l}</button>`).join("");
   $("imapbox").hidden=!!mcity;$("lmap").hidden=!mcity||leafletState===3;$("mof").hidden=!(mcity&&leafletState===3);
@@ -788,7 +790,7 @@ function route_(){
   if(city){openCity(city,pend);pend=0;show("city");window.scrollTo({top:0});$("ft").hidden=false;renderFt();return}
   const id=["mapa","gastos"].includes(h)?h:"viaje";
   show(id);window.scrollTo({top:0});
-  if(id==="viaje"){renderHome();requestAnimationFrame(()=>window.lyoFitTitle&&window.lyoFitTitle())}if(id==="gastos")renderG();if(id==="mapa")renderMap(true);
+  if(id==="viaje"){renderHome();requestAnimationFrame(()=>window.lyoFitTitle&&window.lyoFitTitle())}if(id==="gastos")renderG();if(id==="mapa"){renderMap(false);fitStage();VB0=null;renderMap(true)}
   requestAnimationFrame(carState);
   $("ft").hidden=id!=="viaje";renderFt();
 }
