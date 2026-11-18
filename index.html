@@ -345,24 +345,35 @@ input::placeholder{color:var(--mute)}
 @media (prefers-reduced-motion:reduce){.sec.open .txt{animation:none}}
 @media(min-width:600px){.cc{width:220px}.wc{width:60%}}
 @media(max-width:360px){.phr,.docs{grid-template-columns:minmax(0,1fr)}.gtop{grid-template-columns:minmax(0,1fr)}.donut{margin:0 auto}}
-/* lisboa y oporto: ciudad dentro de un día, mapa */
+/* lisboa y oporto: olas, ciudad dentro de un día, mapa */
+.wv{margin-top:14px;border:1px solid var(--line2);border-radius:18px;padding:14px;background:linear-gradient(135deg,var(--sec1),var(--sec2))}
+.wv .k{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--steel2);margin-bottom:8px}.wv .k svg{width:18px;height:18px}
+.wvb{margin:0 0 10px;font-size:15px}
+.wvc{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;height:96px;align-items:end}
+.wvc span{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:3px}
+.wvc i{display:block;width:100%;border-radius:5px 5px 2px 2px;background:color-mix(in srgb,var(--naz) 45%,transparent)}
+.wvc span.on i{background:var(--naz)}.wvc small{font-size:11px;color:var(--soft)}.wvc span.on small{color:var(--ink);font-weight:700}
 a.ft{text-decoration:none}
 .steps li.cty{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
 .steps li.cty i{width:9px;height:9px;border-radius:50%;background:var(--c)}
 .adr a{cursor:pointer}
 .mapw{position:relative;margin-top:10px}
-.imap{position:relative;margin-top:12px;height:min(56vh,460px);min-height:300px;border-radius:20px;overflow:hidden;border:1px solid var(--line2);background:var(--isea,#13253a)}
+.mbox{margin-top:12px;border:1px solid var(--line2);border-radius:20px;overflow:hidden;background:var(--fill)}
+.mtabs{display:flex;gap:4px;overflow-x:auto;padding:6px;border-bottom:1px solid var(--line);scrollbar-width:none}.mtabs::-webkit-scrollbar{display:none}
+.mtabs button{flex:1 0 auto;border:0;background:none;border-radius:12px;padding:7px 9px;font-weight:700;font-size:13.5px;color:var(--soft);cursor:pointer;white-space:nowrap}
+.mtabs button[aria-selected=true]{background:var(--btn);color:var(--btnInk)}
+.mstage{position:relative;height:min(56vh,460px);min-height:300px}
+.imap{position:absolute;inset:0;overflow:hidden;background:var(--isea,#13253a)}
 .imap{--isea:color-mix(in srgb,#3d86c6 34%,var(--bg));--iland:color-mix(in srgb,var(--ink) 9%,var(--bg))}
 .imap svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;user-select:none}
 .imap svg.drag{cursor:grabbing}
 .imap .zoom{position:absolute;right:10px;top:10px;display:grid;gap:6px;z-index:2}
 .imap .zoom button{width:38px;height:38px;border-radius:12px;border:1px solid var(--line2);background:var(--top);color:var(--ink);font-size:20px;font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0}
 .ihint{position:absolute;right:10px;bottom:10px;margin:0;font-size:12px;font-weight:600;color:var(--soft);background:var(--top);border:1px solid var(--line);border-radius:999px;padding:3px 10px;z-index:2}
-.cchips{padding-left:0;padding-right:0}
 .icity{cursor:pointer}.icity text{font:800 30px "Plus Jakarta Sans",sans-serif;paint-order:stroke;stroke:var(--iland);stroke-width:8px;fill:var(--ink)}
 .icity.off{opacity:.35}.icity .hit{fill:transparent}
-#lmap{height:min(48vh,380px);min-height:220px;border-radius:20px;border:1px solid var(--line2);overflow:hidden;background:var(--fill2);z-index:1}
-.mof{border:1px dashed var(--line2);border-radius:16px;padding:14px;color:var(--soft);font-size:14px;margin:0}
+#lmap{position:absolute;inset:0;background:var(--fill2);z-index:1}
+.mof{position:absolute;inset:12px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line2);border-radius:16px;padding:14px;color:var(--soft);font-size:14px;margin:0}
 .lpin span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--c);color:#111;font:800 13px/1 "Plus Jakarta Sans",sans-serif;border:2px solid #fff;box-shadow:0 2px 6px rgb(0 0 0/.4)}
 #lmap.dk .leaflet-tile{filter:invert(1) hue-rotate(180deg) brightness(.95) contrast(.9) saturate(.6)}
 .leaflet-container{font-family:"Plus Jakarta Sans",system-ui,sans-serif}
@@ -412,15 +423,14 @@ a.ft{text-decoration:none}
 </section>
 
 <section id="s-mapa" hidden>
-  <div class="ptl"><h1>Mis lugares</h1><p>La ruta del viaje y, al tocar una ciudad, sus calles con cada lugar.</p></div>
+  <div class="ptl"><h1>Mis lugares</h1><p>La ruta del viaje y las calles de cada ciudad con sus lugares.</p></div>
   <div class="chips" id="mchips"></div>
   <div class="pad">
-    <div class="imap" id="imapbox"><svg id="imap" role="img" aria-label="Mapa ilustrado de la ruta: Lisboa, Nazaré, Fátima y Oporto"></svg>
-      <div class="zoom"><button type="button" id="zi" aria-label="Acercar">+</button><button type="button" id="zo" aria-label="Alejar">−</button><button type="button" id="zr" aria-label="Centrar el mapa">⤢</button></div>
-      <p class="ihint">Toca una ciudad para ver sus calles</p></div>
-    <h2 id="calles"><span id="mc-h">Las calles</span></h2>
-    <div class="chips cchips" id="cchips"></div>
-    <div class="mapw"><div id="lmap" role="region" aria-label="Mapa de calles con los lugares"></div><p class="mof" id="mof" hidden>El mapa necesita internet. Los lugares siguen aquí abajo y se abren en Google Maps.</p></div>
+    <div class="mbox" id="mbox"><div class="mtabs" id="cchips" role="tablist" aria-label="Ver la ruta o una ciudad"></div>
+      <div class="mstage"><div class="imap" id="imapbox"><svg id="imap" role="img" aria-label="Mapa ilustrado de la ruta: Lisboa, Nazaré, Fátima y Oporto"></svg>
+        <div class="zoom"><button type="button" id="zi" aria-label="Acercar">+</button><button type="button" id="zo" aria-label="Alejar">−</button><button type="button" id="zr" aria-label="Centrar el mapa">⤢</button></div>
+        <p class="ihint">Toca una ciudad</p></div>
+        <div id="lmap" role="region" aria-label="Mapa de calles con los lugares" hidden></div><p class="mof" id="mof" hidden>Las calles necesitan internet. Los lugares siguen aquí abajo y se abren en Google Maps.</p></div></div>
     <ol class="pins" id="pins"></ol>
   </div>
 </section>
@@ -590,13 +600,32 @@ function openCity(c,d){
   $("stats").innerHTML=`<div><small>Noches</small><b>${n}</b></div><div><small>Planes</small><b>${its.length}</b></div><div><small>En el mapa</small><b>${pls}</b></div>`;
   $("cdays").innerHTML=days.map(x=>{const i=DAYS.indexOf(x),pv=DAYS[i-1],nx=DAYS[i+1];return `<article class="day${x.d===d?" open":""}${t.ph==="trip"&&t.d===x.d?" today":""}" id="d${x.d}"><button type="button" class="dh" aria-expanded="${x.d===d}"><span class="db"><b>${x.d}</b><small>${wd(x.d)}</small></span><span class="t"><b>${esc(x.t)}</b><small>${esc(x.w)}</small></span>${ico("chev",2.2).replace("<svg","<svg class=\"chev\"")}</button>
   <div class="det"><ul class="steps">${x.it.map((it,j)=>{const nc=it[4]!==(x.it[j-1]||[])[4]&&x.cs.length>1;return (nc?`<li class="cty" style="--c:${C[it[4]].c}"><i></i>${it[4]}</li>`:"")+plan(it)}).join("")}</ul>
+  ${x.d===16?`<div class="wv" data-wv>${wvHTML()}</div>`:""}
   <div class="dnav"><button type="button" data-gd="${pv?pv.d:""}"${pv?"":" disabled"}>← ${pv?wd(pv.d)+" "+pv.d:""}</button><button type="button" data-gd="${nx?nx.d:""}"${nx?"":" disabled"}>${nx?wd(nx.d)+" "+nx.d:""} →</button></div></div></article>`}).join("");
+  if(days.some(z=>z.d===16))wvLoad();
   if(d!==days[0].d)setTimeout(()=>{const el=$("d"+d);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})},150);
 }
 $("s-city").addEventListener("click",e=>{
   if(e.target.closest("#back")){if(inApp)history.back();else go("");return}
   const g=e.target.closest("[data-gd]");if(g){const d=+g.dataset.gd,x=dayOf(d);if(!x)return;if($("d"+d)){$("d"+d).classList.add("open");$("d"+d).scrollIntoView({behavior:"smooth",block:"start"})}else{pend=d;go(C[x.cs[0]].slug)}return}
   const h=e.target.closest(".dh");if(h){const a=h.parentNode;a.classList.toggle("open");h.setAttribute("aria-expanded",a.classList.contains("open"))}});
+
+/* ---------- olas en Nazaré ---------- */
+const WVD=new Date(2026,11,16),WVH=[8,9,10,11,12,13,14,15,16,17];
+let WV=LS("olas");
+function wvHTML(){const left=Math.ceil((WVD-new Date())/864e5),demo=!!SIM;
+  let body;
+  const data=demo?{h:[2.1,2.4,2.9,3.6,4.2,4.6,4.4,3.9,3.3,2.8],at:0,demo:1}:WV;
+  if(data&&data.h&&data.h.some(v=>v!=null)){const hs=data.h,mx=Math.max(...hs.filter(v=>v!=null)),bi=hs.indexOf(mx);
+    body=`<p class="wvb">Mejor hora para el faro: <b>${WVH[bi]}:00</b> · olas de unos <b>${mx.toFixed(1).replace(".",",")} m</b></p>
+    <div class="wvc" role="img" aria-label="Altura de las olas de 8 a 17 h">${hs.map((v,i)=>`<span class="${i===bi?"on":""}"><i style="height:${v==null?0:Math.max(8,v/mx*100)}%"></i><small>${WVH[i]}</small></span>`).join("")}</div>
+    <p class="note" style="font-size:13px;margin-top:6px">${data.demo?"Ejemplo para probar la app: los datos reales salen unos 7 días antes.":`Previsión mar adentro, actualizada el ${new Date(data.at).getDate()}/${new Date(data.at).getMonth()+1}. En la costa las olas pueden ser mucho mayores.`}</p>`}
+  else body=`<p class="note">${left>7?`Aún falta para saberlo: la previsión sale unos 7 días antes, hacia el 9 de diciembre. Aquí aparecerá sola la mejor hora del día.`:left>=0?"Buscando la previsión… se necesita internet.":"El día de las olas ya pasó."}</p>`;
+  return `<div class="k">${ico("wave",2)}Olas en Nazaré · miércoles 16</div>${body}<p class="note" style="font-size:13px;margin-top:8px">Diciembre es temporada de olas gigantes. Avisos de días grandes en <a href="https://nazarewaves.com" target="_blank" rel="noopener">nazarewaves.com</a>; el día de campeonato el fuerte cierra, pero se ve desde los alrededores.</p>`}
+async function wvLoad(){const left=(WVD-new Date())/864e5;if(left>7||left<-1)return;if(WV&&Date.now()-WV.at<3*3600e3)return;
+  try{const r=await fetch("https://marine-api.open-meteo.com/v1/marine?latitude=39.61&longitude=-9.12&hourly=wave_height&timezone=Europe%2FLisbon&start_date=2026-12-16&end_date=2026-12-16");if(!r.ok)return;
+    const j=await r.json(),t=j.hourly.time,h=j.hourly.wave_height;WV={h:WVH.map(H=>{const k=t.findIndex(x=>x.endsWith("T"+String(H).padStart(2,"0")+":00"));return k<0?null:h[k]}),at:Date.now()};SS("olas",WV);
+    document.querySelectorAll("[data-wv]").forEach(e=>e.innerHTML=wvHTML())}catch(e){}}
 
 /* ---------- mapa con mis lugares ---------- */
 let mday=0,mfocus="",LM=null,lmarks={},tiles=null,lline=null,leafletState=0;
@@ -635,17 +664,18 @@ $("zi").onclick=()=>zoomBy(.7);$("zo").onclick=()=>zoomBy(1/.7);$("zr").onclick=
     if(pts.size===1){const [,,s]=toSvg(0,0),dx=e.clientX-pr[0],dy=e.clientY-pr[1];moved+=Math.abs(dx)+Math.abs(dy);VB[0]-=dx*s;VB[1]-=dy*s;setVB()}
     else if(pts.size===2){const [a,b]=[...pts.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(d0){const [cx,cy]=toSvg((a[0]+b[0])/2,(a[1]+b[1])/2);zoomBy(d0/d,cx,cy)}d0=d;moved=99}});
   const up=e=>{pts.delete(e.pointerId);if(!pts.size)sv.classList.remove("drag");d0=0};
-  sv.addEventListener("pointerup",e=>{const g=moved<8&&e.target.closest&&e.target.closest("[data-ic2]");up(e);if(g){mcity=g.dataset.ic2;mfocus="";renderMap(true);$("calles").scrollIntoView({behavior:"smooth",block:"start"})}});
+  sv.addEventListener("pointerup",e=>{const g=moved<8&&e.target.closest&&e.target.closest("[data-ic2]");up(e);if(g){mcity=g.dataset.ic2;mfocus="";renderMap(true)}});
   sv.addEventListener("pointercancel",up)}
 function renderPins(){let last="";
   $("pins").innerHTML=mlist().map(([k,p],i)=>{const hd=p[1]!==last?`<li class="pg" style="--c:${C[p[1]].c}"><i></i>${p[1]}${mday?"":` · ${wd(p[2])} ${p[2]}`}</li>`:"";last=p[1];return hd+`<li class="pn${mfocus===k?" on":""}" data-pk="${k}" style="--c:${C[p[1]].c}"><button type="button" class="pb" data-pk="${k}"><span class="nm">${i+1}</span><span><b>${esc(p[0])}</b><small>${wd(p[2])} ${p[2]} dic</small></span></button><a class="pr" href="${route(p[5])}" target="_blank" rel="noopener" aria-label="Cómo llegar a ${esc(p[0])}">${ico("go",2)}</a></li>`}).join("")}
 function tileUrl(){$("lmap").classList.toggle("dk",getComputedStyle(document.documentElement).colorScheme.includes("dark"));return "https://tile.openstreetmap.org/{z}/{x}/{y}.png"}
 function loadLeaflet(){if(leafletState)return;leafletState=1;
   const css=document.createElement("link");css.rel="stylesheet";css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";document.head.appendChild(css);
-  const s=document.createElement("script");s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";s.onload=()=>{leafletState=2;renderMap(true)};s.onerror=()=>{leafletState=3;$("lmap").hidden=true;$("mof").hidden=false};document.head.appendChild(s)}
+  const s=document.createElement("script");s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";s.onload=()=>{leafletState=2;renderMap(true)};s.onerror=()=>{leafletState=3;renderMap(false)};document.head.appendChild(s)}
 function renderMap(fit){drawImap();renderPins();$("mchips").querySelectorAll("button").forEach(b=>b.classList.toggle("on",+b.dataset.md===mday));
-  $("cchips").innerHTML=`<button type="button" data-mc=""${mcity?"":' class="on"'}>Todas</button>`+STOPS.map(([c])=>`<button type="button" data-mc="${c}"${mcity===c?' class="on"':""}>${c}</button>`).join("");
-  $("mc-h").textContent=mcity?`Las calles de ${mcity}`:"Las calles";
+  $("cchips").innerHTML=[["","Ruta"],...STOPS.map(([c])=>[c,c])].map(([v,l])=>`<button type="button" role="tab" data-mc="${v}" aria-selected="${mcity===v}">${l}</button>`).join("");
+  $("imapbox").hidden=!!mcity;$("lmap").hidden=!mcity||leafletState===3;$("mof").hidden=!(mcity&&leafletState===3);
+  if(!mcity)return;
   if(leafletState!==2){loadLeaflet();return}
   const L=window.L;
   if(!LM){LM=L.map("lmap",{zoomControl:true,attributionControl:true,scrollWheelZoom:false,tap:true});tiles=L.tileLayer(tileUrl(),{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(LM)}
@@ -660,8 +690,8 @@ function renderMap(fit){drawImap();renderPins();$("mchips").querySelectorAll("bu
   else if(fit&&pts.length)LM.fitBounds(pts,{padding:[28,28],maxZoom:15});
 }
 function markList(){$("pins").querySelectorAll(".pn").forEach(li=>li.classList.toggle("on",li.dataset.pk===mfocus))}
-$("pins").addEventListener("click",e=>{const b=e.target.closest(".pb");if(!b)return;mfocus=b.dataset.pk;markList();if(LM){const p=PL[mfocus];LM.setView([p[3],p[4]],16,{animate:true});lmarks[mfocus]&&lmarks[mfocus].openPopup();$("lmap").scrollIntoView({behavior:"smooth",block:"center"})}else window.open(route(PL[mfocus][5]),"_blank","noopener")});
-document.addEventListener("click",e=>{const a=e.target.closest("[data-mp]");if(!a)return;e.preventDefault();mfocus=a.dataset.mp;mday=0;mcity=PL[mfocus][1];go("mapa");setTimeout(()=>$("calles").scrollIntoView({block:"start"}),80)});
+$("pins").addEventListener("click",e=>{const b=e.target.closest(".pb");if(!b)return;mfocus=b.dataset.pk;if(mcity!==PL[mfocus][1]){mcity=PL[mfocus][1];renderMap(false);$("mbox").scrollIntoView({behavior:"smooth",block:"start"});return}markList();if(LM){const p=PL[mfocus];LM.setView([p[3],p[4]],16,{animate:true});lmarks[mfocus]&&lmarks[mfocus].openPopup();$("mbox").scrollIntoView({behavior:"smooth",block:"start"})}else window.open(route(PL[mfocus][5]),"_blank","noopener")});
+document.addEventListener("click",e=>{const a=e.target.closest("[data-mp]");if(!a)return;e.preventDefault();mfocus=a.dataset.mp;mday=0;mcity=PL[mfocus][1];go("mapa");setTimeout(()=>$("mbox").scrollIntoView({block:"start"}),80)});
 document.addEventListener("themechange",()=>{if(tiles)tiles.setUrl(tileUrl());if(lline)lline.setStyle({color:getComputedStyle(document.documentElement).getPropertyValue("--steel2").trim()})});
 
 /* ---------- gastos ---------- */
