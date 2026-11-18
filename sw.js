@@ -1,5 +1,5 @@
 /* Lisboa y Oporto: guarda la app en el móvil para usarla sin internet */
-const V = "lisboa-oporto-v1";
+const V = "lisboa-oporto-v2";
 const FILES = ["./", "index.html", "manifest.json", "icono.png", "icono-192.png", "favicon-32.png", "apple-touch-icon.png",
   "fotos/lisboa.jpg", "fotos/nazare.jpg", "fotos/fatima.jpg", "fotos/oporto.jpg"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(V).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });

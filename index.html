@@ -360,17 +360,24 @@ a.ft{text-decoration:none}
 .mapw{position:relative;margin-top:10px}
 .mbox{margin-top:12px;border:1px solid var(--line2);border-radius:20px;overflow:hidden;background:var(--fill)}
 .mtabs{display:flex;gap:4px;overflow-x:auto;padding:6px;border-bottom:1px solid var(--line);scrollbar-width:none}.mtabs::-webkit-scrollbar{display:none}
-.mtabs button{flex:1 0 auto;border:0;background:none;border-radius:12px;padding:7px 9px;font-weight:700;font-size:13.5px;color:var(--soft);cursor:pointer;white-space:nowrap}
+.mtabs button{flex:1 0 auto;border:0;background:none;border-radius:12px;padding:7px 6px;font-weight:700;font-size:13px;color:var(--soft);cursor:pointer;white-space:nowrap}
 .mtabs button[aria-selected=true]{background:var(--btn);color:var(--btnInk)}
 .mstage{position:relative;height:min(56vh,460px);min-height:300px}
-.imap{position:absolute;inset:0;overflow:hidden;background:var(--isea,#13253a)}
-.imap{--isea:color-mix(in srgb,#3d86c6 34%,var(--bg));--iland:color-mix(in srgb,var(--ink) 9%,var(--bg))}
-.imap svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;user-select:none}
-.imap svg.drag{cursor:grabbing}
+.imap{position:absolute;inset:0;overflow:hidden;background:var(--sea2)}
+.imap{--bg2:light-dark(#fbfaf6,#0f1615);--sea1:light-dark(#d6ecf2,#0c2a35);--sea2:light-dark(#a9d4e2,#0a2029);--wave:light-dark(#ffffff,#2b5564);--land1:light-dark(#e6e0c8,#1c2622);--land2:light-dark(#f7f3e8,#232d2a);--coast:light-dark(#8fbfcd,#356777);--mt:light-dark(#c9bf9f,#36423d);--mt2:light-dark(#b2a684,#2c3632);--ink2:light-dark(#17201f,#eef2ef);--mut2:light-dark(#5d6966,#a3b0ac);--reg:light-dark(#475569,#94a3b8);--card2:light-dark(#ffffff,#172120);--line3:light-dark(#e3ded2,#2a3532)}
+.imap .iland{fill:url(#ilg);stroke:var(--coast);stroke-width:1.6}.imap .imt{fill:var(--mt)}.imap .imt2{fill:var(--mt2)}
+.imap .igeo{font-family:"Plus Jakarta Sans",sans-serif;font-style:italic;font-weight:500;fill:var(--mut2);opacity:.85}
+.imap .isea{fill:light-dark(#5e9db1,#4f8796);font-family:"Plus Jakarta Sans",sans-serif;font-weight:700;letter-spacing:.3em}
+.imap .ist text{font-family:"Plus Jakarta Sans",sans-serif;font-weight:500;fill:var(--mut2);paint-order:stroke;stroke:var(--land2);stroke-linejoin:round;pointer-events:none}
+.imap .ipin{cursor:pointer}.imap .ipin text{font-family:"Plus Jakarta Sans",sans-serif;font-weight:700;fill:var(--ink2);paint-order:stroke;stroke:var(--land2);stroke-linejoin:round;pointer-events:none}.imap .ipin.dim{opacity:.35}
+.imap .zoom button{background:var(--card2);color:var(--ink2);border-color:var(--line3);box-shadow:0 4px 12px -6px #0005;width:44px;height:44px}
+.imap .ihint{background:var(--card2);color:var(--ink2);border-color:var(--line3);border-radius:10px;font-size:13px;padding:5px 10px;box-shadow:0 4px 12px -6px #0005}
+.imap>svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;user-select:none}
+.imap>svg.drag{cursor:grabbing}
 .imap .zoom{position:absolute;right:10px;top:10px;display:grid;gap:6px;z-index:2}
 .imap .zoom button{width:38px;height:38px;border-radius:12px;border:1px solid var(--line2);background:var(--top);color:var(--ink);font-size:20px;font-weight:700;cursor:pointer;display:grid;place-items:center;padding:0}
-.ihint{position:absolute;right:10px;bottom:10px;margin:0;font-size:12px;font-weight:600;color:var(--soft);background:var(--top);border:1px solid var(--line);border-radius:999px;padding:3px 10px;z-index:2}
-.icity{cursor:pointer}.icity text{font:800 30px "Plus Jakarta Sans",sans-serif;paint-order:stroke;stroke:var(--iland);stroke-width:8px;fill:var(--ink)}
+.ihint{position:absolute;left:10px;top:10px;margin:0;font-size:12px;font-weight:600;color:var(--soft);background:var(--top);border:1px solid var(--line);border-radius:999px;padding:3px 10px;z-index:2}
+.icity{cursor:pointer}
 .icity.off{opacity:.35}.icity .hit{fill:transparent}
 #lmap{position:absolute;inset:0;background:var(--fill2);z-index:1}
 .mof{position:absolute;inset:12px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line2);border-radius:16px;padding:14px;color:var(--soft);font-size:14px;margin:0}
@@ -423,13 +430,12 @@ a.ft{text-decoration:none}
 </section>
 
 <section id="s-mapa" hidden>
-  <div class="ptl"><h1>Mis lugares</h1><p>La ruta del viaje y las calles de cada ciudad con sus lugares.</p></div>
+  <div class="ptl"><h1>Mis lugares</h1><p>La ruta del viaje. Toca una parada para ver sus calles y lugares.</p></div>
   <div class="chips" id="mchips"></div>
   <div class="pad">
     <div class="mbox" id="mbox"><div class="mtabs" id="cchips" role="tablist" aria-label="Ver la ruta o una ciudad"></div>
       <div class="mstage"><div class="imap" id="imapbox"><svg id="imap" role="img" aria-label="Mapa ilustrado de la ruta: Lisboa, Nazaré, Fátima y Oporto"></svg>
-        <div class="zoom"><button type="button" id="zi" aria-label="Acercar">+</button><button type="button" id="zo" aria-label="Alejar">−</button><button type="button" id="zr" aria-label="Centrar el mapa">⤢</button></div>
-        <p class="ihint">Toca una ciudad</p></div>
+        <div class="zoom"><button type="button" id="zi" aria-label="Acercar">+</button><button type="button" id="zo" aria-label="Alejar">−</button><button type="button" id="zr" aria-label="Centrar el mapa"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>
         <div id="lmap" role="region" aria-label="Mapa de calles con los lugares" hidden></div><p class="mof" id="mof" hidden>Las calles necesitan internet. Los lugares siguen aquí abajo y se abren en Google Maps.</p></div></div>
     <ol class="pins" id="pins"></ol>
   </div>
@@ -637,25 +643,46 @@ $("cchips").onclick=e=>{const b=e.target.closest("[data-mc]");if(!b)return;mcity
 /* mapa ilustrado de la ruta (sin internet) */
 const PX=(lo,la)=>[(lo+9.75)*300,(41.5-la)*390];
 const pth=pts=>pts.map((q,i)=>(i?"L":"M")+PX(q[0],q[1]).map(v=>v.toFixed(1)).join(" ")).join("")+"Z";
-const LAND=[[-9.18,38.30],[-9.21,38.42],[-9.17,38.53],[-9.23,38.64],[-9.25,38.67],[-9.12,38.68],[-9.03,38.66],[-8.94,38.72],[-8.92,38.86],[-9.03,38.82],[-9.10,38.71],[-9.30,38.69],[-9.42,38.70],[-9.49,38.72],[-9.50,38.79],[-9.45,38.88],[-9.42,38.96],[-9.38,39.08],[-9.34,39.22],[-9.40,39.36],[-9.32,39.38],[-9.22,39.43],[-9.13,39.53],[-9.08,39.60],[-9.03,39.68],[-8.98,39.78],[-8.92,39.92],[-8.88,40.05],[-8.87,40.15],[-8.83,40.30],[-8.78,40.45],[-8.74,40.62],[-8.70,40.80],[-8.66,41.00],[-8.67,41.15],[-8.70,41.28],[-8.74,41.45],[-8.78,41.70],[-6.0,41.70],[-6.0,38.30]];
+const LAND=[[-8.70,36.90],[-8.80,37.50],[-8.88,37.95],[-8.80,38.20],[-8.86,38.40],[-8.89,38.48],[-9.05,38.45],[-9.21,38.42],[-9.17,38.53],[-9.23,38.64],[-9.25,38.67],[-9.12,38.68],[-9.03,38.66],[-8.94,38.72],[-8.92,38.86],[-9.03,38.82],[-9.10,38.71],[-9.30,38.69],[-9.42,38.70],[-9.49,38.72],[-9.50,38.79],[-9.45,38.88],[-9.42,38.96],[-9.38,39.08],[-9.34,39.22],[-9.40,39.36],[-9.32,39.38],[-9.22,39.43],[-9.13,39.53],[-9.08,39.60],[-9.03,39.68],[-8.98,39.78],[-8.92,39.92],[-8.88,40.05],[-8.87,40.15],[-8.83,40.30],[-8.78,40.45],[-8.74,40.62],[-8.70,40.80],[-8.66,41.00],[-8.67,41.15],[-8.70,41.28],[-8.74,41.45],[-8.78,41.70],[-8.87,41.87],[-8.90,42.10],[-8.82,42.28],[-8.95,42.55],[-9.10,42.80],[-9.25,43.00],[-9.0,43.25],[-4.0,43.5],[-4.0,36.6]];
+const SPAIN=[[-8.87,41.87],[-8.20,42.05],[-8.05,41.82],[-7.20,41.88],[-6.55,41.95],[-6.20,41.60],[-6.90,41.00],[-6.85,40.25],[-7.00,39.67],[-7.53,39.66],[-7.00,39.00],[-7.30,38.40],[-7.00,38.00],[-7.50,37.50],[-7.40,37.10],[-4,36.6],[-4,43.5],[-9.0,43.25],[-9.25,43.00],[-9.10,42.80],[-8.95,42.55],[-8.82,42.28],[-8.90,42.10]];
 const STOPGEO={Lisboa:[-9.14,38.72],"Nazaré":[-9.07,39.60],"Fátima":[-8.67,39.63],Oporto:[-8.61,41.15]};
-const OTHERS=[["Peniche",-9.38,39.36],["Leiria",-8.81,39.74],["Coimbra",-8.43,40.21],["Aveiro",-8.65,40.64],["Sintra",-9.38,38.80]];
-const ROUTE=[[["Lisboa",16],[-9.14,38.72],[-9.05,38.95],[-9.0,39.25],[-9.07,39.60]],[["Nazaré",16],[-9.07,39.60],[-8.85,39.66],[-8.67,39.63]],[["Fátima",17],[-8.67,39.63],[-8.55,40.0],[-8.45,40.4],[-8.55,40.85],[-8.61,41.15]]];
-let VB=null,VB0=null;
-function drawImap(){const sv=$("imap"),lp=pts=>pts.map((q,i)=>(i?"L":"M")+PX(q[0],q[1]).map(v=>v.toFixed(1)).join(" ")).join("");
-  const on=c=>(!mday||(dayOf(mday)||{cs:[]}).cs.includes(c))&&(!mcity||mcity===c);
-  sv.innerHTML=`<path d="${pth(LAND)}" fill="var(--iland)" stroke="var(--line2)" stroke-width="2.5"/>
-  <path d="${lp([[-8.67,41.145],[-8.5,41.12],[-8.3,41.15],[-8.0,41.1],[-7.6,41.13]])}" fill="none" stroke="var(--isea,#13253a)" stroke-width="9" stroke-linecap="round"/>
-  <path d="${lp([[-8.93,38.85],[-8.85,39.0],[-8.68,39.25],[-8.5,39.45],[-8.2,39.47],[-7.6,39.62]])}" fill="none" stroke="var(--isea,#13253a)" stroke-width="9" stroke-linecap="round"/>
-  <text x="${PX(-9.66,0)[0]}" y="${PX(0,39.9)[1]}" fill="var(--mute)" font-size="30" font-weight="700" letter-spacing="10" transform="rotate(-80 ${PX(-9.66,0)[0]} ${PX(0,39.9)[1]})" font-family="Plus Jakarta Sans,sans-serif">OCÉANO ATLÁNTICO</text>
-  ${OTHERS.map(([n,lo,la])=>{const [x,y]=PX(lo,la);return `<circle cx="${x}" cy="${y}" r="6" fill="var(--mute)"/><text x="${x+12}" y="${y+8}" fill="var(--mute)" font-size="24" font-family="Plus Jakarta Sans,sans-serif">${n}</text>`}).join("")}
-  ${ROUTE.map(([[c,d],...pts])=>{const a=!mday||mday===d||(mday===15&&false);return `<path d="${lp(pts)}" fill="none" stroke="var(--steel2)" stroke-width="${a?7:4}" stroke-dasharray="2 14" stroke-linecap="round" opacity="${a?1:.35}"/>`}).join("")}
-  ${STOPS.map(([c],i)=>{const [x,y]=PX(...STOPGEO[c]),left=c==="Fátima"||c==="Oporto";return `<g class="icity${on(c)?"":" off"}" data-ic2="${c}"><circle class="hit" cx="${x}" cy="${y}" r="46"/><circle cx="${x}" cy="${y}" r="21" fill="${C[c].c}" stroke="#fff" stroke-width="4"/><text x="${x}" y="${y+8}" text-anchor="middle" style="font-size:22px;stroke-width:0;fill:#111">${i+1}</text><text x="${left?x+32:x-32}" y="${y+10}" text-anchor="${left?"start":"end"}">${c}</text></g>`}).join("")}`;
-  if(!VB){const xs=Object.values(STOPGEO).map(g=>PX(...g)),x0=Math.min(...xs.map(q=>q[0]))-190,x1=Math.max(...xs.map(q=>q[0]))+190,y0=Math.min(...xs.map(q=>q[1]))-110,y1=Math.max(...xs.map(q=>q[1]))+80;VB0=[x0,y0,x1-x0,y1-y0];VB=[...VB0]}
+const TOWNS=[["Coimbra",-8.43,40.21,0],["Aveiro",-8.65,40.64,0],["Peniche",-9.38,39.36,0],["Sintra",-9.39,38.80,1],["Leiria",-8.81,39.74,1],["Alcobaça",-8.98,39.55,1],["Figueira da Foz",-8.86,40.15,1],["Cascais",-9.42,38.70,1],["Braga",-8.43,41.55,0],["Viana do Castelo",-8.83,41.69,1],["Setúbal",-8.89,38.53,1],["Santarém",-8.68,39.24,0],["Viseu",-7.91,40.66,1],["Évora",-7.91,38.57,1]];
+const ROADS=[[[-9.14,38.72],[-9.0,38.95],[-8.68,39.24],[-8.62,39.5],[-8.67,39.63],[-8.62,39.95],[-8.43,40.21],[-8.5,40.55],[-8.6,40.9],[-8.61,41.15],[-8.45,41.55]],[[-9.14,38.72],[-9.17,39.0],[-9.16,39.36],[-8.98,39.55],[-8.81,39.74],[-8.86,40.15]],[[-8.61,41.15],[-8.83,41.69]],[[-8.43,40.21],[-7.91,40.66]],[[-9.14,38.72],[-8.89,38.53]],[[-9.14,38.72],[-8.4,38.62],[-7.91,38.57]]];
+const LEGS=[["#e8a33d",[-9.14,38.72],[-9.17,39.0],[-9.16,39.36],[-9.07,39.60]],["#5fb3a1",[-9.07,39.60],[-8.98,39.55],[-8.81,39.66],[-8.67,39.63]],["#7f9be0",[-8.67,39.63],[-8.62,39.95],[-8.43,40.21],[-8.5,40.55],[-8.6,40.9],[-8.61,41.15]]];
+const LEGDAY=[16,16,17];
+const MTS=[[-8.80,39.45,30],[-8.74,39.40,36],[-8.68,39.43,26],[-9.42,38.79,22],[-9.38,38.78,18],[-8.20,40.07,34],[-8.14,40.11,42],[-8.07,40.06,30],[-8.17,40.58,36],[-8.10,40.62,30],[-7.62,40.33,48],[-7.55,40.36,56],[-7.47,40.30,44],[-7.90,41.27,40],[-7.83,41.30,46]];
+const GEOS=[["Tejo",-8.78,38.98,0],["Douro",-8.02,41.02,0],["Serra de Aire",-8.74,39.33,1],["Serra da Lousã",-8.14,40.0,1],["Serra da Estrela",-7.55,40.42,1]];
+let VB=null,VB0=null,VBA=0;
+const lp=pts=>pts.map((q,i)=>(i?"L":"M")+PX(q[0],q[1]).map(v=>v.toFixed(1)).join(" ")).join("");
+const pl=pts=>pts.map(q=>PX(q[0],q[1]).map(v=>v.toFixed(1)).join(",")).join(" ");
+let IMBASE="";
+function imBase(){return `<defs><linearGradient id="ilg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--land1)"/><stop offset="1" stop-color="var(--land2)"/></linearGradient><linearGradient id="isg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--sea1)"/><stop offset="1" stop-color="var(--sea2)"/></linearGradient><pattern id="iwv" width="90" height="46" patternUnits="userSpaceOnUse"><path d="M6 20q8-7 16 0t16 0M52 42q8-7 16 0t16 0" fill="none" stroke="var(--wave)" stroke-width="2" stroke-linecap="round" opacity=".55"/></pattern></defs>
+  <rect x="-3000" y="-3000" width="7000" height="7000" fill="url(#isg)"/><rect x="-3000" y="-3000" width="7000" height="7000" fill="url(#iwv)"/>
+  <path class="iland" d="${lp(LAND)}Z" vector-effect="non-scaling-stroke"/>
+  <path d="${lp(SPAIN.slice(0,15))}" fill="none" stroke="var(--mut2)" stroke-width="1.4" stroke-dasharray="2 5" vector-effect="non-scaling-stroke" opacity=".6"/>
+  ${[[[-8.67,41.145],[-8.5,41.12],[-8.3,41.15],[-8.0,41.1],[-7.6,41.13],[-6.9,41.05]],[[-8.93,38.85],[-8.85,39.0],[-8.68,39.25],[-8.5,39.45],[-8.2,39.47],[-7.6,39.62],[-7.0,39.67]]].map(r=>`<polyline points="${pl(r)}" fill="none" stroke="var(--coast)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity=".9"/>`).join("")}
+  ${MTS.map(([lo,la,s])=>{const [x,y]=PX(lo,la),h=s,b=s*.9;return `<path class="imt2" d="M${x-b} ${y}L${x} ${y-h}L${x+b} ${y}Z"/><path class="imt" d="M${x-b} ${y}L${x} ${y-h}L${x+b*.15} ${y}Z"/>`}).join("")}
+  <g>${ROADS.map(r=>`<polyline points="${pl(r)}" fill="none" stroke="var(--reg)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity=".5"/>`).join("")}</g>`}
+function paintImap(){const sv=$("imap"),r=sv.getBoundingClientRect();if(!r.width)return;
+  const s=Math.max(VB[2]/r.width,VB[3]/r.height),zoomed=VB[2]<VB0[2]*.6,f=v=>(v*s).toFixed(1);
+  const on=c=>(!mday||(dayOf(mday)||{cs:[]}).cs.includes(c));
+  const [sx,sy]=PX(-9.62,39.95);
+  let o=IMBASE+GEOS.filter(g=>!g[3]||zoomed).map(([t,lo,la])=>{const [x,y]=PX(lo,la);return `<text class="igeo" x="${x}" y="${y}" font-size="${f(12)}" text-anchor="middle">${t}</text>`}).join("")
+   +`<text class="isea" x="${sx}" y="${sy}" font-size="${f(13)}" text-anchor="middle" transform="rotate(-78 ${sx} ${sy})">OCÉANO ATLÁNTICO</text>`
+   +LEGS.map(([c,...pts],i)=>{const a=!mday||mday===LEGDAY[i];return `<polyline points="${pl(pts)}" fill="none" stroke="${c}" stroke-width="${a?6:4}" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke" opacity="${a?1:.3}"/>`}).join("")
+   +TOWNS.filter(t=>!t[3]||zoomed).map(([n,lo,la])=>{const [x,y]=PX(lo,la);return `<g class="ist"><circle cx="${x}" cy="${y}" r="${f(4.5)}" fill="var(--land2)" stroke="var(--mut2)" stroke-width="1.6" vector-effect="non-scaling-stroke"/><text x="${(x+7*s).toFixed(1)}" y="${(y+4.5*s).toFixed(1)}" font-size="${f(12.5)}" stroke-width="${f(3.5)}">${n}</text></g>`}).join("")
+   +STOPS.map(([c],i)=>{const [x,y]=PX(...STOPGEO[c]),left=c!=="Fátima",dim=!on(c);return `<g class="ipin${dim?" dim":""}" data-ic2="${c}"><circle cx="${x}" cy="${y}" r="${f(26)}" fill="transparent"/><circle cx="${x}" cy="${y}" r="${f(9.5)}" fill="${C[c].c}" stroke="#fff" stroke-width="2.6" vector-effect="non-scaling-stroke"/><text x="${(left?x-15*s:x+15*s).toFixed(1)}" y="${(y+5.5*s).toFixed(1)}" text-anchor="${left?"end":"start"}" font-size="${f(17)}" stroke-width="${f(4.5)}">${c}</text></g>`}).join("");
+  sv.innerHTML=o;sv.setAttribute("viewBox",VB.map(v=>v.toFixed(1)).join(" "))}
+function drawImap(){const sv=$("imap");if(sv.closest("[hidden]"))return;if(!IMBASE)IMBASE=imBase();
+  const r=sv.getBoundingClientRect();if(!r.width)return;const asp=r.width/r.height;
+  if(!VB0||Math.abs(asp-VBA)>.01){const xs=Object.values(STOPGEO).map(g=>PX(...g));let x0=Math.min(...xs.map(q=>q[0]))-230,x1=Math.max(...xs.map(q=>q[0]))+230,y0=Math.min(...xs.map(q=>q[1]))-80,y1=Math.max(...xs.map(q=>q[1]))+110,w=x1-x0,h=y1-y0;
+    if(w/h<asp){const nw=h*asp;x0-=(nw-w)/2;w=nw}else{const nh=w/asp;y0-=(nh-h)/2;h=nh}
+    VB0=[x0,y0,w,h];VB=[...VB0];VBA=asp}
   setVB()}
-function setVB(){$("imap").setAttribute("viewBox",VB.map(v=>v.toFixed(1)).join(" "))}
-function zoomBy(f,cx,cy){const r=$("imap").getBoundingClientRect(),s=Math.max(VB[2]/r.width,VB[3]/r.height);if(cx==null){cx=VB[0]+VB[2]/2;cy=VB[1]+VB[3]/2}
-  const w=Math.min(VB0[2]*1.6,Math.max(120,VB[2]*f)),k=w/VB[2];VB=[cx-(cx-VB[0])*k,cy-(cy-VB[1])*k,w,VB[3]*k];setVB()}
+function setVB(){const w=Math.min(VB0[2],Math.max(VB0[2]*.15,VB[2])),h=w*VB0[3]/VB0[2],cx=VB[0]+VB[2]/2,cy=VB[1]+VB[3]/2;
+  VB=[Math.min(VB0[0]+VB0[2]-w,Math.max(VB0[0],cx-w/2)),Math.min(VB0[1]+VB0[3]-h,Math.max(VB0[1],cy-h/2)),w,h];paintImap()}
+function zoomBy(f,cx,cy){if(cx==null){cx=VB[0]+VB[2]/2;cy=VB[1]+VB[3]/2}const w=VB[2]*f,k=w/VB[2];VB=[cx-(cx-VB[0])*k,cy-(cy-VB[1])*k,w,VB[3]*k];setVB()}
+addEventListener("resize",()=>{if(!$("s-mapa").hidden&&!mcity){VB0=null;drawImap()}});
 $("zi").onclick=()=>zoomBy(.7);$("zo").onclick=()=>zoomBy(1/.7);$("zr").onclick=()=>{VB=[...VB0];setVB()};
 {const sv=$("imap"),pts=new Map();let moved=0,d0=0;
   const toSvg=(cx,cy)=>{const r=sv.getBoundingClientRect(),s=Math.max(VB[2]/r.width,VB[3]/r.height),ox=(r.width*s-VB[2])/2,oy=(r.height*s-VB[3])/2;return [VB[0]-ox+(cx-r.left)*s,VB[1]-oy+(cy-r.top)*s,s]};
@@ -672,10 +699,10 @@ function tileUrl(){$("lmap").classList.toggle("dk",getComputedStyle(document.doc
 function loadLeaflet(){if(leafletState)return;leafletState=1;
   const css=document.createElement("link");css.rel="stylesheet";css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";document.head.appendChild(css);
   const s=document.createElement("script");s.src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";s.onload=()=>{leafletState=2;renderMap(true)};s.onerror=()=>{leafletState=3;renderMap(false)};document.head.appendChild(s)}
-function renderMap(fit){drawImap();renderPins();$("mchips").querySelectorAll("button").forEach(b=>b.classList.toggle("on",+b.dataset.md===mday));
+function renderMap(fit){renderPins();$("mchips").querySelectorAll("button").forEach(b=>b.classList.toggle("on",+b.dataset.md===mday));
   $("cchips").innerHTML=[["","Ruta"],...STOPS.map(([c])=>[c,c])].map(([v,l])=>`<button type="button" role="tab" data-mc="${v}" aria-selected="${mcity===v}">${l}</button>`).join("");
   $("imapbox").hidden=!!mcity;$("lmap").hidden=!mcity||leafletState===3;$("mof").hidden=!(mcity&&leafletState===3);
-  if(!mcity)return;
+  if(!mcity){drawImap();return}
   if(leafletState!==2){loadLeaflet();return}
   const L=window.L;
   if(!LM){LM=L.map("lmap",{zoomControl:true,attributionControl:true,scrollWheelZoom:false,tap:true});tiles=L.tileLayer(tileUrl(),{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(LM)}
@@ -759,7 +786,7 @@ function route_(){
   if(city){openCity(city,pend);pend=0;show("city");window.scrollTo({top:0});$("ft").hidden=false;renderFt();return}
   const id=["mapa","gastos"].includes(h)?h:"viaje";
   show(id);window.scrollTo({top:0});
-  if(id==="viaje")renderHome();if(id==="gastos")renderG();if(id==="mapa")renderMap(true);
+  if(id==="viaje"){renderHome();requestAnimationFrame(()=>window.lyoFitTitle&&window.lyoFitTitle())}if(id==="gastos")renderG();if(id==="mapa")renderMap(true);
   requestAnimationFrame(carState);
   $("ft").hidden=id!=="viaje";renderFt();
 }
@@ -775,7 +802,7 @@ if("serviceWorker" in navigator&&/github\.io$|pages\.dev$/.test(location.hostnam
 <script>
 /* título en una sola línea: ajusta el tamaño al hueco disponible */
 (function(){const t=document.querySelector(".brand");if(!t)return;
-function fit(){t.style.fontSize="60px";const r=t.clientWidth/t.scrollWidth;t.style.fontSize=Math.max(20,Math.min(60,Math.floor(60*r*0.98)))+"px"}
+function fit(){if(!t.clientWidth)return;t.style.fontSize="60px";const r=t.clientWidth/t.scrollWidth;t.style.fontSize=Math.max(20,Math.min(60,Math.floor(60*r*0.98)))+"px"}
 function align(){const d=document.querySelector("#count .dg");t.style.marginTop="0px";if(!d)return;const a=t.getBoundingClientRect(),b=d.getBoundingClientRect();
 /* centro de las letras (sin la parte que baja de la p) con el centro de las fichas */
 const cap=a.height*0.08;t.style.marginTop=Math.round(((b.top+b.height/2)-(a.top+a.height/2-cap))/ (parseFloat(getComputedStyle(document.documentElement).zoom)||1))+"px"}
@@ -789,7 +816,8 @@ function hang(){/* la etiqueta "días para el viaje" cuelga junto a la línea de
 const c=document.getElementById("count"),l=c&&c.querySelector("small"),hs=document.querySelector(".hs");if(!l||!hs)return;
 const z=parseFloat(getComputedStyle(document.documentElement).zoom)||1;c.style.marginBottom="";let sp=hs.querySelector(".hang");if(!sp){sp=document.createElement("span");sp.className="hang";hs.prepend(sp)}
 const L=l.getBoundingClientRect().height/z+3,W=c.getBoundingClientRect().width/z+10;c.style.marginBottom=(-L)+"px";sp.style.cssText=`float:right;width:${W}px;height:${L}px;margin-right:-0px`}
-function run(){fit();align();hang();balance()}
+function run(){if(!t.offsetParent)return;fit();align();hang();balance()}
+window.lyoFitTitle=run;
 run();addEventListener("resize",run);document.fonts&&document.fonts.ready.then(run);setTimeout(run,600)})();
 </script>
 <div class="ths" id="thSheet" role="dialog" aria-modal="true" aria-label="Elegir estilo de la app" hidden><div class="thsb"><div class="thh"><b>Estilo de la app</b><button type="button" class="thx" id="thClose" aria-label="Cerrar">✕</button></div><div class="thrw"><button type="button" class="tha l" aria-label="Anterior">‹</button><div class="thc">
