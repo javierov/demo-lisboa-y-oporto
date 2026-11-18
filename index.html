@@ -363,6 +363,7 @@ a.ft{text-decoration:none}
 .mtabs button{flex:1 0 auto;border:0;background:none;border-radius:12px;padding:7px 6px;font-weight:700;font-size:13px;color:var(--soft);cursor:pointer;white-space:nowrap}
 .mtabs button[aria-selected=true]{background:var(--btn);color:var(--btnInk)}
 .mstage{position:relative;height:min(56vh,460px);min-height:300px}
+.mstage .rst{position:absolute;right:10px;bottom:10px;z-index:900;min-height:44px;padding:0 14px;border-radius:12px;border:1px solid light-dark(#e3ded2,#2a3532);background:light-dark(#ffffff,#172120);color:light-dark(#17201f,#eef2ef);font:600 15px "Plus Jakarta Sans",sans-serif;cursor:pointer;box-shadow:0 4px 12px -6px #0005}
 .imap{position:absolute;inset:0;overflow:hidden;background:var(--sea2)}
 .imap{--bg2:light-dark(#fbfaf6,#0f1615);--sea1:light-dark(#d6ecf2,#0c2a35);--sea2:light-dark(#a9d4e2,#0a2029);--wave:light-dark(#ffffff,#2b5564);--land1:light-dark(#e6e0c8,#1c2622);--land2:light-dark(#f7f3e8,#232d2a);--coast:light-dark(#8fbfcd,#356777);--mt:light-dark(#c9bf9f,#36423d);--mt2:light-dark(#b2a684,#2c3632);--ink2:light-dark(#17201f,#eef2ef);--mut2:light-dark(#5d6966,#a3b0ac);--reg:light-dark(#475569,#94a3b8);--card2:light-dark(#ffffff,#172120);--line3:light-dark(#e3ded2,#2a3532)}
 .imap .iland{fill:url(#ilg);stroke:var(--coast);stroke-width:1.6}.imap .imt{fill:var(--mt)}.imap .imt2{fill:var(--mt2)}
@@ -436,7 +437,7 @@ a.ft{text-decoration:none}
     <div class="mbox" id="mbox"><div class="mtabs" id="cchips" role="tablist" aria-label="Ver la ruta o una ciudad"></div>
       <div class="mstage"><div class="imap" id="imapbox"><svg id="imap" role="img" aria-label="Mapa ilustrado de la ruta: Lisboa, Nazaré, Fátima y Oporto"></svg>
         <div class="zoom"><button type="button" id="zi" aria-label="Acercar">+</button><button type="button" id="zo" aria-label="Alejar">−</button><button type="button" id="zr" aria-label="Centrar el mapa"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button></div></div>
-        <div id="lmap" role="region" aria-label="Mapa de calles con los lugares" hidden></div><p class="mof" id="mof" hidden>Las calles necesitan internet. Los lugares siguen aquí abajo y se abren en Google Maps.</p></div></div>
+        <div id="lmap" role="region" aria-label="Mapa de calles con los lugares" hidden></div><button type="button" class="rst" id="mrst" aria-label="Volver al inicio: toda la ruta, sin filtros">↺ Volver</button><p class="mof" id="mof" hidden>Las calles necesitan internet. Los lugares siguen aquí abajo y se abren en Google Maps.</p></div></div>
     <ol class="pins" id="pins"></ol>
   </div>
 </section>
@@ -683,6 +684,7 @@ function setVB(){const w=Math.min(VB0[2],Math.max(VB0[2]*.15,VB[2])),h=w*VB0[3]/
   VB=[Math.min(VB0[0]+VB0[2]-w,Math.max(VB0[0],cx-w/2)),Math.min(VB0[1]+VB0[3]-h,Math.max(VB0[1],cy-h/2)),w,h];paintImap()}
 function zoomBy(f,cx,cy){if(cx==null){cx=VB[0]+VB[2]/2;cy=VB[1]+VB[3]/2}const w=VB[2]*f,k=w/VB[2];VB=[cx-(cx-VB[0])*k,cy-(cy-VB[1])*k,w,VB[3]*k];setVB()}
 addEventListener("resize",()=>{if(!$("s-mapa").hidden&&!mcity){VB0=null;drawImap()}});
+$("mrst").onclick=()=>{mday=0;mcity="";mfocus="";if(VB0)VB=[...VB0];renderMap(true);if(LM)LM.closePopup()};
 $("zi").onclick=()=>zoomBy(.7);$("zo").onclick=()=>zoomBy(1/.7);$("zr").onclick=()=>{VB=[...VB0];setVB()};
 {const sv=$("imap"),pts=new Map();let moved=0,d0=0;
   const toSvg=(cx,cy)=>{const r=sv.getBoundingClientRect(),s=Math.max(VB[2]/r.width,VB[3]/r.height),ox=(r.width*s-VB[2])/2,oy=(r.height*s-VB[3])/2;return [VB[0]-ox+(cx-r.left)*s,VB[1]-oy+(cy-r.top)*s,s]};
@@ -705,7 +707,7 @@ function renderMap(fit){renderPins();$("mchips").querySelectorAll("button").forE
   if(!mcity){drawImap();return}
   if(leafletState!==2){loadLeaflet();return}
   const L=window.L;
-  if(!LM){LM=L.map("lmap",{zoomControl:true,attributionControl:true,scrollWheelZoom:false,tap:true});tiles=L.tileLayer(tileUrl(),{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(LM)}
+  if(!LM){LM=L.map("lmap",{zoomControl:true,attributionControl:false,scrollWheelZoom:false,tap:true});tiles=L.tileLayer(tileUrl(),{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>'}).addTo(LM);L.control.attribution({position:"bottomleft",prefix:'<a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a>'}).addTo(LM)}
   Object.values(lmarks).forEach(m=>m.remove());lmarks={};if(lline)lline.remove();
   const ls=mlist(),pts=[];
   ls.forEach(([k,p],i)=>{const ic=L.divIcon({className:"lpin",html:`<span style="--c:${C[p[1]].c}">${i+1}</span>`,iconSize:[28,28],iconAnchor:[14,14]});
