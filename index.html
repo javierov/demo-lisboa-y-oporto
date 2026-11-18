@@ -354,6 +354,17 @@ input::placeholder{color:var(--mute)}
 .wvc i{display:block;width:100%;border-radius:5px 5px 2px 2px;background:color-mix(in srgb,var(--naz) 45%,transparent)}
 .wvc span.on i{background:var(--naz)}.wvc small{font-size:11px;color:var(--soft)}.wvc span.on small{color:var(--ink);font-weight:700}
 a.ft{text-decoration:none}
+.flt{--fi:var(--ink);--fs:var(--soft);margin:22px 20px 0;border:1px solid color-mix(in srgb,var(--ink) 38%,transparent);border-radius:14px;background:color-mix(in srgb,var(--ink) 9%,var(--bg));color:var(--fi);overflow:hidden}
+.flt+.ft{margin-top:22px}
+.flt .fr{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px}
+.flt .fr+.fr{border-top:1px solid color-mix(in srgb,var(--ink) 16%,transparent)}
+.flt .fr>svg{width:26px;height:26px;color:var(--steel2)}
+.flt b{display:block;font-size:14.5px;color:var(--fi)}
+.flt small{display:block;font-size:12px;color:var(--fs)}
+.flt .st{font-size:12px;font-weight:700;border-radius:999px;padding:5px 10px;white-space:nowrap;text-decoration:none;background:transparent;color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 38%,transparent)}
+.flt .st.ok{background:#1f7a46;color:#fff;border-color:transparent}
+.flt .st.warn{background:#b7791f;color:#fff;border-color:transparent}
+.flt .st.bad{background:#b42318;color:#fff;border-color:transparent}
 .steps li.cty{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
 .steps li.cty i{width:9px;height:9px;border-radius:50%;background:var(--c)}
 .adr a{cursor:pointer}
@@ -465,6 +476,7 @@ a.ft{text-decoration:none}
     </div>
   </div>
 </section>
+<div class="flt" id="flt" aria-live="polite"></div>
 <a class="ft" id="ft" href="https://www.google.com/search?q=tiempo+Lisboa" target="_blank" rel="noopener" aria-label="Tiempo: ver el pronóstico"></a>
 </div>
 
@@ -509,7 +521,7 @@ const PL={
 /* días: cada plan = [icono, texto, lugar (clave del mapa o búsqueda), etiqueta, ciudad] */
 const DAYS=[
  {d:15,c:"Lisboa",cs:["Lisboa"],t:"Llegada y Lisboa a pie",w:"Alfama, el castillo y Belém",it:[
-  ["✈️","Vuelo a Lisboa: llegan por la mañana. Al centro, metro línea roja (unos 25 min).","aeropuerto",0,"Lisboa"],
+  ["✈️","Vuelo Ryanair FR3078: sale de Barcelona a las 6:35 y llega a Lisboa a las 7:40 (hora de Portugal, una hora menos que en España). Al centro, metro línea roja (unos 25 min).","aeropuerto",0,"Lisboa"],
   ["🏨","Dejar la maleta en el alojamiento (por reservar).","",2,"Lisboa"],
   ["🏰","Alfama a pie: la Sé, el Miradouro de Santa Luzia y el Castelo de São Jorge. Entrar temprano evita la cola.","castelo",1,"Lisboa"],
   ["🥪","Almuerzo en una tasca: bifana o caldo verde, barato y de verdad.","tasca Alfama Lisboa",0,"Lisboa"],
@@ -525,16 +537,17 @@ const DAYS=[
   ["🐟","Almuerzo de pescado a la brasa o caldeirada junto a la playa. De postre, una bola de Berlim.","praia",0,"Nazaré"],
   ["🚌","Bus Nazaré → Fátima por la tarde: 1 h aprox., pocas salidas y a veces con cambio en Leiria.","naztermi",3,"Nazaré"],
   ["🏨","Alojamiento en Fátima (por reservar): hay pensiones baratas junto al santuario.","",2,"Fátima"],
+  ["🚶","Paseo hasta Aljustrel (unos 2 km): las casas de los pastorcitos, un pueblo de piedra. Mejor antes de que anochezca, hacia las 17:30.","aljustrel",0,"Fátima"],
   ["🕯️","Rosario de las 21:30 en la Capelinha das Aparições y procesión de las velas. Llevar abrigo.","capelinha",0,"Fátima"]]},
- {d:17,c:"Oporto",cs:["Fátima","Oporto"],t:"Fátima en calma y Oporto",w:"Santuario a primera hora, tarde en la Ribeira",it:[
-  ["⛪","Santuario a primera hora, sin grupos: Basílica del Rosario y Basílica de la Santísima Trinidad.","basilica",0,"Fátima"],
-  ["🚶","Paseo hasta Aljustrel (unos 2 km): las casas de los pastorcitos, un pueblo de piedra.","aljustrel",0,"Fátima"],
-  ["🚌","Bus Fátima → Oporto (Campanhã), unas 2 h directo con Rede Expressos. Hay salidas a lo largo de la mañana.","fterm",3,"Fátima"],
+ {d:17,c:"Oporto",cs:["Fátima","Oporto"],t:"Fátima en calma y Oporto",w:"Santuario al amanecer, mediodía en la Ribeira",it:[
+  ["⛪","Santuario a primera hora (hacia las 7:30), sin grupos: Basílica del Rosario y Basílica de la Santísima Trinidad.","basilica",0,"Fátima"],
+  ["🚌","Bus Fátima → Oporto (Campanhã), unas 2 h directo con Rede Expressos. Coger uno temprano, hacia las 8:30–9:00, para llegar antes de las 11.","fterm",3,"Fátima"],
   ["🧳","Dejar las maletas en una consigna cerca de São Bento para caminar ligeros.","consigna equipaje São Bento Porto",0,"Oporto"],
   ["🖼️","Estación de São Bento y sus azulejos (gratis), y la Sé do Porto.","saobento",0,"Oporto"],
-  ["🚶","Bajar a la Ribeira y cruzar el Ponte Luís I por arriba hasta el Jardim do Morro. Atardecer sobre el río hacia las 17:05.","morro",0,"Oporto"],
-  ["🍽️","Cena: una francesinha, el plato de Oporto.","francesinha Porto",0,"Oporto"],
-  ["✈️","Al aeropuerto en metro, línea E violeta (unos 30 min). Vuelo de vuelta por la noche.","opo",0,"Oporto"]]}];
+  ["🍽️","Almuerzo temprano: una francesinha, el plato de Oporto.","francesinha Porto",0,"Oporto"],
+  ["🚶","Bajar a la Ribeira y cruzar el Ponte Luís I por arriba hasta el Jardim do Morro: la mejor vista de Oporto.","morro",0,"Oporto"],
+  ["🧳","Recoger las maletas y, hacia las 15:00, metro al aeropuerto, línea E violeta (unos 30 min). Estar allí sobre las 16:00.","opo",0,"Oporto"],
+  ["✈️","Vuelo Ryanair FR4546: sale de Oporto a las 18:05 y llega a Barcelona a las 20:50 (hora de España).","opo",0,"Oporto"]]}];
 const TAG=["","Con entrada","Por reservar","Comprar billete"];
 
 const P={plane:'<path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/>',bus:'<rect x="4" y="4" width="16" height="13" rx="2"/><path d="M4 11h16M7 20v-3M17 20v-3"/>',tram:'<rect x="5" y="6" width="14" height="12" rx="3"/><path d="M12 6V3M8 3h8M5 12h14M8 21l1.5-3M16 21l-1.5-3"/>',cable:'<path d="M3 4l18 5"/><path d="M12 6.5V10"/><rect x="7" y="10" width="10" height="9" rx="2"/><path d="M7 14h10"/>',walk:'<circle cx="13" cy="4" r="2"/><path d="M9 21l3-7 3 3v5M7 12l4-4h3l2 4 2 1M11 8l1 6"/>',bed:'<path d="M3 19V7M3 15h18v4M21 15v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="12" r="2"/>',art:'<path d="M12 3a9 9 0 1 0 0 18c1.1 0 2-.8 2-1.9 0-1.4-1.1-1.6-1.1-2.7 0-1 .8-1.6 1.8-1.6H17a4 4 0 0 0 4-4C21 6.5 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',cake:'<path d="M4 20h16v-7H4zM4 16c2 1.2 4 1.2 6 0s4-1.2 6 0 3 1.2 4 0M12 13V9M12 4c1 1 1 2.2 0 3-1-.8-1-2 0-3"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',castle:'<path d="M4 21V9h3V6h2v3h2V6h2v3h2V6h2v3h3v12zM10 21v-4a2 2 0 0 1 4 0v4"/>',bag:'<path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/>',food:'<path d="M7 3v18M5 3v5a2 2 0 0 0 4 0V3M17 21V3c-2 1-3 4-3 7h3"/>',sun:'<path d="M3 18h18M7 18a5 5 0 0 1 10 0M12 6v3M5 10l2 2M19 10l-2 2M3 14h2M19 14h2"/>',moon:'<path d="M20 14A8 8 0 1 1 10 4a6 6 0 0 0 10 10z"/>',heart:'<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',case:'<rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5h6v2M4 12h16"/>',church:'<path d="M12 2v5M10 4h4M6 21V12l6-5 6 5v9zM10 21v-4a2 2 0 0 1 4 0v4"/>',wave:'<path d="M2 17c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/><path d="M3 12c1.5-5 7-8 11.5-6.5 2.5.8 3.5 3 2.5 4.6-1 1.6-3.6 1.4-4-.4"/>',candle:'<path d="M9 21h6M10 21V11h4v10M12 11V9"/><path d="M12 3c1.6 1.8 1.6 3.4 0 4.6-1.6-1.2-1.6-2.8 0-4.6z"/>',fish:'<path d="M3 12c3-5 10-6 14-1l4-3v8l-4-3c-4 5-11 4-14-1z"/><circle cx="8" cy="11" r=".6"/>',pin:'<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',back:'<path d="M15 5l-7 7 7 7"/>',chev:'<path d="M9 6l6 6-6 6"/>',map:'<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',go:'<path d="M3 11l18-8-8 18-2-8z"/>'};
@@ -762,6 +775,33 @@ $("gdel").onclick=()=>{G=G.filter(g=>g.id!==editId);SS("gastos",G);resetForm();r
 $("glist").addEventListener("click",e=>{const r=e.target.closest("[data-ge]");if(r){const g=G.find(g=>g.id===+r.dataset.ge);editId=g.id;$("gc").value=g.c;$("gi").value=g.v;$("gd").value=String(g.d||15);$("gt").value=g.h;$("gform").gk.value=g.k;$("gsave").textContent="Guardar";$("gcancel").hidden=false;$("gdel").hidden=false;$("gf-h").textContent="Editar gasto";renderG();$("gform").scrollIntoView({behavior:"smooth",block:"center"})}});
 $("glist").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.closest("[data-ge]")){e.preventDefault();e.target.click()}});
 
+/* ---------- vuelos ---------- */
+/* Rellenar cuando Tobías pase los datos: no = número de vuelo (p. ej. "TP1033"), sale/llega = hora local "HH:MM" */
+const FLIGHTS=[
+ {k:"Ida",d:"2026-12-15",no:"FR3078",de:"BCN",a:"LIS",sale:"06:35",llega:"07:40",ap:"Barcelona → Lisboa",vague:"llega por la mañana"},
+ {k:"Vuelta",d:"2026-12-17",no:"FR4546",de:"OPO",a:"BCN",sale:"18:05",llega:"20:50",ap:"Oporto → Barcelona",vague:"sale por la noche"}];
+/* URL del script de Google que consulta el estado (vacía = solo botón «Estado en vivo») */
+const FLIGHT_API="https://script.google.com/macros/s/AKfycbzPt457cM2dqgFFR-G2q6p-ozQXOvo0ZsQ-aPd-zTQs0mHWwtrQZakzOJCvnpoyWDhy/exec";
+const FST={Expected:["Previsto",""],CheckIn:["Facturación abierta","ok"],Boarding:["Embarcando","ok"],GateClosed:["Puerta cerrada","warn"],Departed:["Ha despegado","ok"],EnRoute:["En vuelo","ok"],Approaching:["Aterrizando pronto","ok"],Arrived:["Ha aterrizado","ok"],Delayed:["Retrasado","warn"],Canceled:["Cancelado","bad"],CanceledUncertain:["Puede estar cancelado","bad"],Diverted:["Desviado","bad"],Unknown:["Sin datos",""]};
+const hm=t=>t?String(t).slice(11,16):"";
+function fltState(f){const k="flt-"+f.no+"-"+f.d;return LS(k)}
+function fltHTML(){const t=T();if(t.ph==="after")return "";
+  return FLIGHTS.map(f=>{const dd=new Date(f.d+"T12:00"),fecha=`${WD[dd.getDay()]} ${dd.getDate()} dic`;
+    if(!f.no)return `<div class="fr">${ico("plane",1.8)}<span><b>Vuelo de ${f.k.toLowerCase()} · ${fecha}</b><small>${f.ap} · ${f.vague}</small></span><span class="st">Pendiente</span></div>`;
+    const live="https://www.google.com/search?q="+encodeURIComponent("estado vuelo "+f.no),s=fltState(f)||(SIM&&FLIGHT_API?null:null);
+    let chip=`<a class="st" href="${live}" target="_blank" rel="noopener">En vivo ↗</a>`,line=`${f.de} ${f.sale||"--:--"} → ${f.a} ${f.llega||"--:--"}`;
+    if(s&&!s.error){const [l,c]=FST[s.status]||[s.status,""],late=s.dep&&s.dep.rev&&s.dep.sched&&s.dep.rev!==s.dep.sched;
+      chip=`<a class="st ${late&&!c?"warn":c}" href="${live}" target="_blank" rel="noopener">${l}${late?" · "+hm(s.dep.rev):""}</a>`;
+      line=`${f.de} ${hm(s.dep&&s.dep.sched)||f.sale} → ${f.a} ${hm(s.arr&&(s.arr.rev||s.arr.sched))||f.llega}${s.dep&&s.dep.term?" · T"+s.dep.term:""}${s.dep&&s.dep.gate?" · puerta "+s.dep.gate:""}`}
+    return `<div class="fr">${ico("plane",1.8)}<span><b>${f.k} · ${fecha}</b><small>${f.no} · ${esc(line)}</small></span>${chip}</div>`}).join("")}
+function drawFlt(){const h=fltHTML();$("flt").innerHTML=h;$("flt").hidden=!h||$("ft").hidden}
+async function loadFlt(){if(!FLIGHT_API)return;const now=Date.now();
+  for(const f of FLIGHTS){if(!f.no)continue;const dep=new Date(f.d+"T"+(f.sale||"12:00")).getTime(),arr=new Date(f.d+"T"+(f.llega||f.sale||"12:00")).getTime()+(f.llega&&f.llega<f.sale?864e5:0);
+    if(now<dep-8*3600e3||now>arr+3*3600e3)continue;const old=fltState(f);if(old&&now-old.at<15*60e3)continue;
+    try{const r=await fetch(`${FLIGHT_API}?n=${encodeURIComponent(f.no)}&d=${f.d}`);if(!r.ok)continue;const j=await r.json();j.at=now;SS("flt-"+f.no+"-"+f.d,j)}catch(e){}}
+  drawFlt()}
+setInterval(()=>{if(!$("flt").hidden)loadFlt()},10*60e3);
+
 /* ---------- pie con el tiempo ---------- */
 const WX={Lisboa:[15,9,"psun"],"Nazaré":[15,9,"psun"],"Fátima":[13,5,"cloud"],Oporto:[14,6,"cloud"]};
 const WMO=c=>c===0?["sunny","Despejado"]:c<=2?["psun","Algo nuboso"]:c===3?["cloud","Nublado"]:c<=48?["fog","Niebla"]:c<=57?["cloud","Llovizna"]:c<=67?["cloud","Lluvia"]:c<=77?["cloud","Nieve"]:c<=82?["cloud","Chubascos"]:c<=86?["cloud","Nieve"]:["cloud","Tormenta"];
@@ -787,12 +827,12 @@ function route_(){
   let h=decodeURIComponent(location.hash.slice(1));
   const m=h.match(/^prueba-(\d+)$/);if(m){SIM=dayOf(+m[1])?+m[1]:0;try{SIM?sessionStorage.setItem("lyo-sim",SIM):sessionStorage.removeItem("lyo-sim")}catch(e){}gsel=null;history.replaceState(null,"",location.pathname+location.search);h="";resetForm()}
   const city=Object.keys(C).find(c=>C[c].slug===h);
-  if(city){openCity(city,pend);pend=0;show("city");window.scrollTo({top:0});$("ft").hidden=false;renderFt();return}
+  if(city){openCity(city,pend);pend=0;show("city");window.scrollTo({top:0});$("ft").hidden=false;renderFt();$("flt").hidden=true;return}
   const id=["mapa","gastos"].includes(h)?h:"viaje";
   show(id);window.scrollTo({top:0});
   if(id==="viaje"){renderHome();requestAnimationFrame(()=>window.lyoFitTitle&&window.lyoFitTitle())}if(id==="gastos")renderG();if(id==="mapa"){renderMap(false);fitStage();VB0=null;renderMap(true)}
   requestAnimationFrame(carState);
-  $("ft").hidden=id!=="viaje";renderFt();
+  $("ft").hidden=id!=="viaje";renderFt();drawFlt();if(id==="viaje")loadFlt();
 }
 window.addEventListener("hashchange",route_);
 document.querySelectorAll("[data-ic]").forEach(e=>e.outerHTML=ico(e.dataset.ic,2));
