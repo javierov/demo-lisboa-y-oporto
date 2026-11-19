@@ -611,7 +611,7 @@ new ResizeObserver(carState).observe($("car"));
 let carMoved=false;
 
 /* ---------- parada ---------- */
-const plan=([ic,tx,p,tg])=>{const k=PL[p],q=k?k[5]:p;return `<li><span class="ic">${ico(EM[ic])}</span><span class="tx">${esc(tx)}${tg?`<span class="tag">${TAG[tg]}</span>`:""}${q?`<span class="adr">${ico("pin",2)}${k?`<a href="#mapa" data-mp="${p}">En mi mapa</a> · `:""}<a href="${k?route(q):map(q)}" target="_blank" rel="noopener">${k?"Cómo llegar":"Buscar en Maps"}</a></span>`:""}</span></li>`};
+const plan=([ic,tx,p,tg])=>{const k=PL[p],q=k?k[5]:p;return `<li><span class="ic">${ico(EM[ic])}</span><span class="tx">${esc(tx)}${tg?`<span class="tag">${TAG[tg]}</span>`:""}${q?`<span class="adr">${ico("pin",2)}${k?`<a href="#mapa" data-mp="${p}">En mi mapa</a> · `:""}<a href="${map(q)}" target="_blank" rel="noopener">${k?"Ver en Google Maps":"Buscar en Google Maps"}</a></span>`:""}</span></li>`};
 function openCity(c,d){
   const [,n,,b]=STOPS.find(x=>x[0]===c),days=DAYS.filter(x=>x.cs.includes(c)),t=T();
   if(!d)d=days[0].d;
@@ -713,7 +713,7 @@ $("zi").onclick=()=>zoomBy(.7);$("zo").onclick=()=>zoomBy(1/.7);$("zr").onclick=
     if(bd<36){mcity=best;mfocus="";renderMap(true)}});
   sv.addEventListener("pointercancel",up)}
 function renderPins(){let last="";
-  $("pins").innerHTML=mlist().map(([k,p],i)=>{const hd=p[1]!==last?`<li class="pg" style="--c:${C[p[1]].c}"><i></i>${p[1]}${mday?"":` · ${wd(p[2])} ${p[2]}`}</li>`:"";last=p[1];return hd+`<li class="pn${mfocus===k?" on":""}" data-pk="${k}" style="--c:${C[p[1]].c}"><button type="button" class="pb" data-pk="${k}"><span class="nm">${i+1}</span><span><b>${esc(p[0])}</b><small>${wd(p[2])} ${p[2]} dic</small></span></button><a class="pr" href="${route(p[5])}" target="_blank" rel="noopener" aria-label="Cómo llegar a ${esc(p[0])}">${ico("go",2)}</a></li>`}).join("")}
+  $("pins").innerHTML=mlist().map(([k,p],i)=>{const hd=p[1]!==last?`<li class="pg" style="--c:${C[p[1]].c}"><i></i>${p[1]}${mday?"":` · ${wd(p[2])} ${p[2]}`}</li>`:"";last=p[1];return hd+`<li class="pn${mfocus===k?" on":""}" data-pk="${k}" style="--c:${C[p[1]].c}"><button type="button" class="pb" data-pk="${k}"><span class="nm">${i+1}</span><span><b>${esc(p[0])}</b><small>${wd(p[2])} ${p[2]} dic</small></span></button><a class="pr" href="${map(p[5])}" target="_blank" rel="noopener" aria-label="Ver ${esc(p[0])} en Google Maps">${ico("pin",2)}</a></li>`}).join("")}
 function tileUrl(){$("lmap").classList.toggle("dk",getComputedStyle(document.documentElement).colorScheme.includes("dark"));return "https://tile.openstreetmap.org/{z}/{x}/{y}.png"}
 function loadLeaflet(){if(leafletState)return;leafletState=1;
   const css=document.createElement("link");css.rel="stylesheet";css.href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";document.head.appendChild(css);
@@ -730,7 +730,7 @@ function renderMap(fit){renderPins();$("mchips").querySelectorAll("button").forE
   Object.values(lmarks).forEach(m=>m.remove());lmarks={};if(lline)lline.remove();
   const ls=mlist(),pts=[];
   ls.forEach(([k,p],i)=>{const ic=L.divIcon({className:"lpin",html:`<span style="--c:${C[p[1]].c}">${i+1}</span>`,iconSize:[28,28],iconAnchor:[14,14]});
-    const m=L.marker([p[3],p[4]],{icon:ic,title:p[0]}).addTo(LM).bindPopup(`<b>${esc(p[0])}</b><br><small>${p[1]} · ${wd(p[2])} ${p[2]} dic</small><br><a href="${route(p[5])}" target="_blank" rel="noopener">Cómo llegar →</a>`);
+    const m=L.marker([p[3],p[4]],{icon:ic,title:p[0]}).addTo(LM).bindPopup(`<b>${esc(p[0])}</b><br><small>${p[1]} · ${wd(p[2])} ${p[2]} dic</small><br><a href="${map(p[5])}" target="_blank" rel="noopener">Ver en Google Maps →</a>`);
     m.on("click",()=>{mfocus=k;markList()});lmarks[k]=m;pts.push([p[3],p[4]])});
   lline=L.polyline(pts,{color:getComputedStyle(document.documentElement).getPropertyValue("--steel2").trim()||"#8fa3bf",weight:2,opacity:.6,dashArray:"4 6"}).addTo(LM);
   LM.invalidateSize();
@@ -738,7 +738,7 @@ function renderMap(fit){renderPins();$("mchips").querySelectorAll("button").forE
   else if(fit&&pts.length)LM.fitBounds(pts,{padding:[28,28],maxZoom:15});
 }
 function markList(){$("pins").querySelectorAll(".pn").forEach(li=>li.classList.toggle("on",li.dataset.pk===mfocus))}
-$("pins").addEventListener("click",e=>{const b=e.target.closest(".pb");if(!b)return;mfocus=b.dataset.pk;if(mcity!==PL[mfocus][1]){mcity=PL[mfocus][1];renderMap(false);$("mbox").scrollIntoView({behavior:"smooth",block:"start"});return}markList();if(LM){const p=PL[mfocus];LM.setView([p[3],p[4]],16,{animate:true});lmarks[mfocus]&&lmarks[mfocus].openPopup();$("mbox").scrollIntoView({behavior:"smooth",block:"start"})}else window.open(route(PL[mfocus][5]),"_blank","noopener")});
+$("pins").addEventListener("click",e=>{const b=e.target.closest(".pb");if(!b)return;mfocus=b.dataset.pk;if(mcity!==PL[mfocus][1]){mcity=PL[mfocus][1];renderMap(false);$("mbox").scrollIntoView({behavior:"smooth",block:"start"});return}markList();if(LM){const p=PL[mfocus];LM.setView([p[3],p[4]],16,{animate:true});lmarks[mfocus]&&lmarks[mfocus].openPopup();$("mbox").scrollIntoView({behavior:"smooth",block:"start"})}else window.open(map(PL[mfocus][5]),"_blank","noopener")});
 document.addEventListener("click",e=>{const a=e.target.closest("[data-mp]");if(!a)return;e.preventDefault();mfocus=a.dataset.mp;mday=0;mcity=PL[mfocus][1];go("mapa");setTimeout(()=>$("mbox").scrollIntoView({block:"start"}),80)});
 document.addEventListener("themechange",()=>{if(tiles)tiles.setUrl(tileUrl());if(lline)lline.setStyle({color:getComputedStyle(document.documentElement).getPropertyValue("--steel2").trim()})});
 
