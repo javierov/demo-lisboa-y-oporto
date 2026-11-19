@@ -653,7 +653,7 @@ $("s-city").addEventListener("click",e=>{
   const h=e.target.closest(".dh");if(h){const a=h.parentNode;a.classList.toggle("open");h.setAttribute("aria-expanded",a.classList.contains("open"))}});
 
 /* desplazamiento seguro: suave si se puede y, si el navegador no se mueve, directo */
-function goTo(el,off){if(!el)return;const y=Math.max(0,Math.round(el.getBoundingClientRect().top+scrollY-(off==null?72:off)));try{window.scrollTo({top:y,behavior:"smooth"})}catch(e){window.scrollTo(0,y)}setTimeout(()=>{if(Math.abs(scrollY-y)>30)window.scrollTo(0,y)},700)}
+function goTo(el,off){if(!el)return;const bar=document.querySelector(".top"),bh=bar?bar.getBoundingClientRect().height:72;const y=Math.max(0,Math.round(el.getBoundingClientRect().top+scrollY-bh-12-(off||0)));try{window.scrollTo({top:y,behavior:"smooth"})}catch(e){window.scrollTo(0,y)}setTimeout(()=>{if(Math.abs(scrollY-y)>30)window.scrollTo(0,y)},700)}
 
 /* ---------- olas en Nazaré ---------- */
 const WVD=new Date(2026,11,16),WVH=[8,9,10,11,12,13,14,15,16,17];
@@ -830,7 +830,7 @@ $("gform").onsubmit=e=>{e.preventDefault();const v=parseFloat(String($("gi").val
   SS("gastos",G);gsel=rec.d;resetForm();renderG();renderHome()};
 $("gcancel").onclick=()=>{resetForm();renderG()};
 $("gdel").onclick=()=>{G=G.filter(g=>g.id!==editId);SS("gastos",G);resetForm();renderG();renderHome()};
-$("glist").addEventListener("click",e=>{const r=e.target.closest("[data-ge]");if(r){const g=G.find(g=>g.id===+r.dataset.ge);editId=g.id;$("gc").value=g.c;$("gi").value=g.v;$("gd").value=String(g.d||15);$("gt").value=g.h;$("gform").gk.value=g.k;$("gsave").textContent="Guardar";$("gcancel").hidden=false;$("gdel").hidden=false;$("gf-h").textContent="Editar gasto";renderG();goTo($("gform"),140)}});
+$("glist").addEventListener("click",e=>{const r=e.target.closest("[data-ge]");if(r){const g=G.find(g=>g.id===+r.dataset.ge);editId=g.id;$("gc").value=g.c;$("gi").value=g.v;$("gd").value=String(g.d||15);$("gt").value=g.h;$("gform").gk.value=g.k;$("gsave").textContent="Guardar";$("gcancel").hidden=false;$("gdel").hidden=false;$("gf-h").textContent="Editar gasto";renderG();goTo($("gform"),60)}});
 $("glist").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.closest("[data-ge]")){e.preventDefault();e.target.click()}});
 
 /* ---------- vuelos ---------- */
